@@ -1,0 +1,19 @@
+package com.easyway.passenger.feign;
+
+import com.easyway.common.utils.R;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * 这是一个声明式的远程调用
+ * @author ZSY
+ */
+@FeignClient("mall-coupon")
+public interface CouponFeignService {
+
+    /**
+     * 远程调用 coupon 测试
+     */
+    @RequestMapping("/coupon/coupon/member/list")
+    R memberCoupons();
+}

@@ -1,0 +1,104 @@
+spring:
+  application:
+    name: ticket-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 47.94.164.185:8849
+    gateway:
+      routes:
+        #Query A 参数有A就行，Query B,C 参数B的值为C即可
+        #实现针对于“http://localhost:88/zsy0216?url=baidu”，转发到“https://www.github.com/zsy0216”，
+        #- id: github_route
+        #  uri: https://www.github.com
+        #  predicates:
+        #    - Query=url,github
+        - id: product_route
+          uri: lb://ticket-operation
+          predicates:
+            - Path=/api/product/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: order_route
+          uri: lb://ticket-order
+          predicates:
+            - Path=/api/order/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: coupon_route
+          uri: lb://ticket-coupon
+          predicates:
+            - Path=/api/coupon/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: member_route
+          uri: lb://ticket-member
+          predicates:
+            - Path=/api/member/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: ware_route
+          uri: lb://ticket-ware
+          predicates:
+            - Path=/api/ware/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: third_party_route
+          uri: lb://ticket-third-party
+          predicates:
+            - Path=/api/third-party/**
+          filters:
+            - RewritePath=/api/third-party/(?<segment>.*),/$\{segment}
+
+        - id: admin_route
+          uri: lb://renren-fast
+          predicates:
+            - Path=/api/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
+
+        - id: ticket_host_route # 要放在后面
+          uri: lb://ticket-product
+          predicates:
+            - Host=guliticket.com, item.guliticket.com
+
+        - id: ticket_search_route
+          uri: lb://ticket-search
+          predicates:
+            - Host=search.guliticket.com
+
+        - id: ticket_auth_route
+          uri: lb://ticket-auth-server
+          predicates:
+            - Host=auth.guliticket.com
+
+        - id: ticket_cart_route
+          uri: lb://ticket-cart
+          predicates:
+            - Host=cart.guliticket.com
+
+        - id: ticket_order_route
+          uri: lb://ticket-order
+          predicates:
+            - Host=order.guliticket.com
+
+        - id: ticket_member_route
+          uri: lb://ticket-member
+          predicates:
+            - Host=member.guliticket.com
+
+        - id: ticket_seckill_route
+          uri: lb://ticket-seckill
+          predicates:
+            - Host=seckill.guliticket.com
+
+      ## http://localhost:88/api/captcha.jpg   http://localhost:8080/renren-fast/captcha.jpg
+      ## http://localhost:88/api/product/category/list/tree http://localhost:10000/product/category/list/tree
+
+server:
+  port: 88

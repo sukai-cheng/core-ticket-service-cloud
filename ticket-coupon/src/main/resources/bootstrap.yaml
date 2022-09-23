@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: ticket-operation
+  cloud:
+    nacos:
+      config:
+        server-addr: 47.94.164.185:8849
+        file-extension: yaml
+        namespace: d9a84b3c-81c1-47fb-9370-b388280a4c5b
